@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Resto</title>
+    <link rel="stylesheet" href="css\signup.css">
+</head>
+
+<body>
+    <script type="module" defer>
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+        // import { getAuth } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js';
+        import { getAuth, signInWithEmailAndPassword,  createUserWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+        
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyDKd_dggpMIfRS9YEfah_2gkefTVFte2_Y",
+          authDomain: "resto-ecf40.firebaseapp.com",
+          projectId: "resto-ecf40",
+          storageBucket: "resto-ecf40.appspot.com",
+          messagingSenderId: "488618180970",
+          appId: "1:488618180970:web:78e4af3bfb57dd2c0ee513",
+          measurementId: "G-Z0VCF167B5"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // authetication
+        getAuth().onAuthStateChanged( (user)=>{
+            if(user){
+                location.replace("index.html");
+            }
+        })
+
+        function login(){
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth,email,password)
+            .catch((error)=>{
+                document.getElementById("login-error").innerHTML = error.message;
+            });
+        }
+
+        function signUp(){
+            const email = document.getElementById("signupemail").value;
+            const password = document.getElementById("signuppassword").value;
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email, password)
+            .catch((error)=>{
+                document.getElementById("signup-error").innerHTML = error.message;
+            });
+        }
+
+        function forgetPassword(){
+            const email = document.getElementById("email").value;
+            const auth = getAuth();
+            sendPasswordResetEmail(auth,email)
+            .then(()=>{
+                alert("Reset link sent to your email id");
+            })
+            .catch((error)=>{
+                document.getElementById("login-error").innerHTML = error.message;
+            });
+        }
+
+        window.login = login;
+        window.signUp= signUp;
+        window.forgetPassword = forgetPassword;
+
+    </script>
+
+    <h2><a href="./index.html"><h2>Resto</h2></a></h2>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#" id = "signUpForm">
+                <h1>Create Account</h1>
+                <!-- <input type="text" placeholder="Name" id = "signupname"/> -->
+                <input type="email" placeholder="Email" id = "signupemail"/>
+                <input type="password" placeholder="Password" id = "signuppassword"/>
+                <button onclick = "signUp()">Sign Up</button>
+                <small><span id="signup-error" style="color: red;"></span></small>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form onsubmit = "login()" action="#" id = "loginForm">
+                <h1>Sign In</h1>
+                <input type="email" placeholder="Email" id = "email"/>
+                <input type="password" placeholder="Password" id = "password">
+                <a onclick = forgetPassword() href="#">forgot password</a>
+                <button>Sign In</button>
+                <small><span id="login-error" style="color: red;"></span></small>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <input type="button" class= "ghost" id="signIn" value="Sign In" onclick="ValidateEmail" />
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <input type="button" class= "ghost" id="signUp" value="Sign Up" onclick="ValidateEmail" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+    
+
+   
+    
+
+    <!--====== Sign Form js ======-->
+    <script src="js\signup.js"></script>
+
+</body>
+
+</html>
